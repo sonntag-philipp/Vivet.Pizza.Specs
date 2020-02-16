@@ -1,0 +1,261 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Vivet.Pizza.Specs",
+    "version": "1.0",
+    "contact": {
+      "name": "Philipp Sonntag",
+      "email": "sonntag.philipp@outlook.de"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/sonntag-philipp/Vivet.Pizza/blob/develop/client/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://localhost:5001",
+      "description": "ASP.NET Core"
+    }
+  ],
+  "paths": {
+    "/orders/{orderId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "orderId",
+          "in": "path",
+          "description": "",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Order",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "operationId": "get-orders-orderId",
+        "description": "Get the order with the specified order id.",
+        "parameters": []
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-orders-orderId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "summary": "",
+        "operationId": "post-orders",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Order": {
+        "title": "Order",
+        "type": "object",
+        "x-examples": {
+          "Piccola Strada": {
+            "orderId": 1,
+            "menuId": 1,
+            "timestamp": "2020-02-16T13:24:58.621Z",
+            "name": "Our first order @Pico"
+          }
+        },
+        "description": "",
+        "x-tags": [
+          "Order"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "integer"
+          },
+          "timestamp": {
+            "type": "string",
+            "default": "current_timestamp",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "menuId": {
+            "type": "string"
+          },
+          "menu": {
+            "$ref": "#/components/schemas/Menu"
+          }
+        },
+        "required": [
+          "timestamp",
+          "menuId"
+        ]
+      },
+      "Menu": {
+        "title": "Menu",
+        "type": "object",
+        "description": "",
+        "x-tags": [
+          "Menu"
+        ],
+        "x-examples": {
+          " Picos Menu": {
+            "menuId": 1,
+            "name": "Pico's Menu",
+            "version": "1.0.0"
+          }
+        },
+        "properties": {
+          "menuId": {
+            "type": "integer"
+          },
+          "version": {
+            "type": "string",
+            "description": "Using semantic versioning https://semver.org/"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "required": [
+          "menuId",
+          "name"
+        ]
+      },
+      "Dish": {
+        "title": "Dish",
+        "type": "object",
+        "properties": {
+          "dishId": {
+            "type": "integer"
+          },
+          "menuId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "menu": {
+            "$ref": "#/components/schemas/Menu"
+          }
+        },
+        "required": [
+          "dishId",
+          "menuId",
+          "name",
+          "price"
+        ]
+      },
+      "Item": {
+        "title": "Item",
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "integer"
+          },
+          "orderId": {
+            "type": "integer"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "dishId": {
+            "type": "integer"
+          },
+          "dish": {
+            "$ref": "#/components/schemas/Dish"
+          },
+          "owner": {
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "required": [
+          "orderId",
+          "dishId"
+        ]
+      },
+      "DishOption": {
+        "title": "DishOption",
+        "type": "object",
+        "properties": {
+          "dishOptionId": {
+            "type": "integer"
+          },
+          "dishId": {
+            "type": "integer"
+          },
+          "menuId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "price": {
+            "type": "number"
+          },
+          "tag": {
+            "type": "string",
+            "maxLength": 15
+          }
+        },
+        "required": [
+          "dishId",
+          "menuId",
+          "name",
+          "price"
+        ]
+      }
+    }
+  }
+}
